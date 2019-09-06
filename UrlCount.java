@@ -36,6 +36,7 @@ public class UrlCount {
                     String link = matcher.group().replaceFirst("href=\"", "")
                             .replaceFirst("\">", "")
                             .replaceFirst("\"[\\s]?target=\"[a-zA-Z_0-9]*", "");
+                    System.out.println(link);                    
                     if (valid(link)) {
                         url.set(link);
                         context.write(url, one);
