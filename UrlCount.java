@@ -29,13 +29,13 @@ public class UrlCount {
     private Text url = new Text();
     private final static IntWritable one = new IntWritable(1);
     public void map(Object key, Text value, Context context
-                    ) throws IOException, InterruptedException {
+                    ) throws IOException {
         StringTokenizer itr = new StringTokenizer(value.toString());
         while (itr.hasMoreTokens()) {
             getLinks(itr.nextToken(), context);
         }
     }
-    public void getLinks(String line, Context context) {
+    public void getLinks(String line, Context context) throws InterruptedException{
         try {
             Matcher tagmatch = htmltag.matcher(line);
             while (tagmatch.find()) {
