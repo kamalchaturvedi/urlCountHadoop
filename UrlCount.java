@@ -29,7 +29,7 @@ public class UrlCount {
     private Text url = new Text();
     private final static IntWritable one = new IntWritable(1);
     public void map(Object key, Text value, Context context
-                    ) throws IOException {
+                    ) throws IOException, InterruptedException {
         StringTokenizer itr = new StringTokenizer(value.toString());
         while (itr.hasMoreTokens()) {
             getLinks(itr.nextToken(), context);
