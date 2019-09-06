@@ -20,41 +20,34 @@ public class UrlCount {
 
   public static class LinkMapper 
         extends Mapper<Object, Text, Text, IntWritable>{
-    private Pattern htmltag;
-    private Pattern link;
-    public LinkMapper() {
-        htmltag = Pattern.compile("<a\\b[^>]*href=\"[^>]*>(.*?)</a>");
-        link = Pattern.compile("href=\"[^>]*\">");
-    }
+    private Pattern htmltag = Pattern.compile("<a\\b[^>]*href=\"[^>]*>(.*?)</a>");
+    private Pattern link = Pattern.compile("href=\"[^>]*\">");
     private Text url = new Text();
     private final static IntWritable one = new IntWritable(1);
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
         StringTokenizer itr = new StringTokenizer(value.toString());
         while (itr.hasMoreTokens()) {
-            getLinks(itr.nextToken(), context);
-        }
-    }
-    public void getLinks(String line, Context context) throws InterruptedException{
-        try {
-            Matcher tagmatch = htmltag.matcher(line);
-            while (tagmatch.find()) {
-                Matcher matcher = link.matcher(tagmatch.group());
-                matcher.find();
-                String link = matcher.group().replaceFirst("href=\"", "")
-                        .replaceFirst("\">", "")
-                        .replaceFirst("\"[\\s]?target=\"[a-zA-Z_0-9]*", "");
-                if (valid(link)) {
-                    url.set(link);
-                    context.write(url, one);
+            try {
+                Matcher tagmatch = htmltag.matcher(itr.nextToken());
+                while (tagmatch.find()) {
+                    Matcher matcher = link.matcher(tagmatch.group());
+                    matcher.find();
+                    String link = matcher.group().replaceFirst("href=\"", "")
+                            .replaceFirst("\">", "")
+                            .replaceFirst("\"[\\s]?target=\"[a-zA-Z_0-9]*", "");
+                    if (valid(link)) {
+                        url.set(link);
+                        context.write(url, one);
+                    }
                 }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
     }
 
