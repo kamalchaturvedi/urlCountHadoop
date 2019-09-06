@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.net.MalformedURLException;
-
+import java.util.logging.*;
 public class UrlCount {
 
   public static class LinkMapper 
         extends Mapper<Object, Text, Text, IntWritable>{
     private Pattern htmltag = Pattern.compile("<a\\b[^>]*href=\"[^>]*>(.*?)</a>");
+    Logger logger = Logger.getLogger(LinkMapper.class.getName());
     private Pattern link = Pattern.compile("href=\"[^>]*\">");
     private Text url = new Text();
     private final static IntWritable one = new IntWritable(1);
@@ -36,7 +37,7 @@ public class UrlCount {
                     String link = matcher.group().replaceFirst("href=\"", "")
                             .replaceFirst("\">", "")
                             .replaceFirst("\"[\\s]?target=\"[a-zA-Z_0-9]*", "");
-                    System.out.println(link);                    
+                    logger.log(Level.INFO, link);                    
                     if (valid(link)) {
                         url.set(link);
                         context.write(url, one);
