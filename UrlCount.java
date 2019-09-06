@@ -28,7 +28,7 @@ public class UrlCount {
     }
     private Text url = new Text();
     private final static IntWritable one = new IntWritable(1);
-    void map(Object key, Text value, Context context
+    public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
         StringTokenizer itr = new StringTokenizer(value.toString());
         while (itr.hasMoreTokens()) {
