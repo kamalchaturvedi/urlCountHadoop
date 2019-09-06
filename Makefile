@@ -34,3 +34,10 @@ stream:
 	-reducer Reducer.py \
 	-file Mapper.py -file Reducer.py \
 	-input input -output stream-output
+
+urlstream:
+	hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+	-mapper UrlMapper.py \
+	-reducer UrlReducer.py \
+	-file UrlMapper.py -file UrlReducer.py \
+	-input input -output stream-output-url
