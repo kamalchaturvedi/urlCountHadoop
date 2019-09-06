@@ -17,6 +17,7 @@ for line in sys.stdin:
         # Reduce step, i.e. the input for reducer.py
         #
         # tab-delimited; the trivial word count is 1
-        url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', word)
-        if len(url) > 0:
-            print('%s\t%s' % (url[0], 1))
+        url_list = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', word)
+        if len(url_list) > 0:
+            for url in url_list:
+                print('%s\t%s' % (url[0], 1))
